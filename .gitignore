@@ -1,4 +1,9 @@
+vendor/
+.phpunit.result.cache
+
+
 # Numerous always-ignore extensions
+
 *.diff
 *.err
 *.orig
