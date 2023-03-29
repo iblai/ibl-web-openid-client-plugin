@@ -13,7 +13,7 @@
  * @link      https://github.com/daggerhart
  *
  * @wordpress-plugin
- * Plugin Name:       OpenID Connect Generic
+ * Plugin Name:       IBL WP OpenID Connect
  * Plugin URI:        https://github.com/daggerhart/openid-connect-generic
  * Description:       Connect to an OpenID Connect generic client using Authorization Code Flow.
  * Version:           3.9.1

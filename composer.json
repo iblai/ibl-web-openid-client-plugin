@@ -1,5 +1,6 @@
 {
     "name": "ibl/ibl-web-openid-client-plugin",
+    "version": "3.9.1",
     "description": "openid-client",
     "type": "wordpress-plugin",
     "autoload": {
