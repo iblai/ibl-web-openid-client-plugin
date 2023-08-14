@@ -145,7 +145,7 @@ class OpenID_Connect_Generic {
 		$redirect_uri = admin_url( 'admin-ajax.php?action=openid-connect-authorize' );
 
 		if ( $this->settings->alternate_redirect_uri ) {
-			$redirect_uri = site_url( '/openid-connect-authorize' );
+			$redirect_uri = home_url( '/openid-connect-authorize' );
 		}
 
 		$state_time_limit = 180;

@@ -1,114 +1,88 @@
-# OpenID Connect Generic Client #
-**Contributors:** [daggerhart](https://profiles.wordpress.org/daggerhart/), [tnolte](https://profiles.wordpress.org/tnolte/)  
-**Donate link:** http://www.daggerhart.com/  
-**Tags:** security, login, oauth2, openidconnect, apps, authentication, autologin, sso  
-**Requires at least:** 4.9  
-**Tested up to:** 6.0.1  
-**Stable tag:** 3.9.1  
-**Requires PHP:** 7.2  
-**License:** GPLv2 or later  
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
+# IBL WP Auth
 
-A simple client that provides SSO or opt-in authentication against a generic OAuth2 Server implementation.
+WP Open ID client forked [from](https://github.com/daggerhart/openid-connect-generic).
 
-## Description ##
+### Dependencies
 
-This plugin allows to authenticate users against OpenID Connect OAuth2 API with Authorization Code Flow.
-Once installed, it can be configured to automatically authenticate users (SSO), or provide a "Login with OpenID Connect"
-button on the login form. After consent has been obtained, an existing user is automatically logged into WordPress, while
-new users are created in WordPress database.
+- [IBL edX Base OAuth SSO Backend](https://github.com/ibleducation/ibl-edx-base-oauth-sso-backend)
+- [IBL WP Platform](https://github.com/ibleducation/ibl-wp-platform)
 
-Much of the documentation can be found on the Settings > OpenID Connect Generic dashboard page.
+### Update
 
-Please submit issues to the Github repo: https://github.com/daggerhart/openid-connect-generic
+To make sure this plugin is upto date with the original version.
 
-## Installation ##
+- Clone repo.
 
-1. Upload to the `/wp-content/plugins/` directory
-1. Activate the plugin
-1. Visit Settings > OpenID Connect and configure to meet your needs
+```
+git clone git@github.com:ibleducation/ibl-wp-auth.git
+```
 
-## Frequently Asked Questions ##
+- Add new remote to the original version.
 
-### What is the client's Redirect URI? ###
+```
+git remote add original https://github.com/daggerhart/openid-connect-generic.git
+```
 
-Most OAuth2 servers will require whitelisting a set of redirect URIs for security purposes. The Redirect URI provided
-by this client is like so:  https://example.com/wp-admin/admin-ajax.php?action=openid-connect-authorize
+- Fetch update from original repo.
 
-Replace `example.com` with your domain name and path to WordPress.
+```
+git fetch original dev
+git checkout dev
+git pull original dev
+```
 
-### Can I change the client's Redirect URI? ###
+- Rebase or merge changes to our main branch.
 
-Some OAuth2 servers do not allow for a client redirect URI to contain a query string. The default URI provided by
-this module leverages WordPress's `admin-ajax.php` endpoint as an easy way to provide a route that does not include
-HTML, but this will naturally involve a query string. Fortunately, this plugin provides a setting that will make use of
-an alternate redirect URI that does not include a query string.
+```
+git checkout main
+git rebase dev
+git push origin main -f
+```
 
-On the settings page for this plugin (Dashboard > Settings > OpenID Connect Generic) there is a checkbox for
-**Alternate Redirect URI**. When checked, the plugin will use the Redirect URI
-`https://example.com/openid-connect-authorize`.
+### Create an Open id client in edX for WP.
 
+- Head over to `https://<edx_lms_domain>/admin/oidc_provider/client/add/`.
+- **Name**: `Wordpress`
+- **Client Type**: `Confidential`
+- **Response types**: `code (Authorization Code Flow)`
+- **Redirect URIs**:
 
-## Changelog ##
+```
+https://<wordpress_domain>/sso-proxy/
+https://<wordpress_domain>/sso-proxy
+https://<wordpress_domain>/openid-connect-authorize
+```
 
-### 3.9.1 ###
+- **Require Consent?**: `False` (Uncheck)
+- **Scopes**: `email profile openid`
+- **Post Logout Redirect URIs**:
 
-* Improvement: @timnolte - Refactors Composer setup and GitHub Actions.
-* Improvement: @timnolte - Bumps WordPress tested version compatibility.
+```
+https://<wordpress_domain>/sso/logout
+https://<wordpress_domain>/sso/logout/
+https://<wordpress_domain>/reestablish-session
+https://<wordpress_domain>/reestablish-session/
+```
 
-### 3.9.0 ###
+- Click the `Save and continue editing` button. This should generate `Client ID` and `Client SECRET` under `Credentials`, copy them as we shall be using them to configure WP to use edX as the Identity Provider.
 
-* Feature: @matchaxnb - Added support for additional configuration constants.
-* Feature: @schanzen - Added support for agregated claims.
-* Fix: @rkcreation - Fixed access token not updating user metadata after login.
-* Fix: @danc1248 - Fixed user creation issue on Multisite Networks.
-* Feature: @RobjS - Added plugin singleton to support for more developer customization.
-* Feature: @jkouris - Added action hook to allow custom handling of session expiration.
-* Fix: @tommcc - Fixed admin CSS loading only on the plugin settings screen.
-* Feature: @rkcreation - Added method to refresh the user claim.
-* Feature: @Glowsome - Added acr_values support & verification checks that it when defined in options is honored.
-* Fix: @timnolte - Fixed regression which caused improper fallback on missing claims.
-* Fix: @slykar - Fixed missing query string handling in redirect URL.
-* Fix: @timnolte - Fixed issue with some user linking and user creation handling.
-* Improvement: @timnolte - Fixed plugin settings typos and screen formatting.
-* Security: @timnolte - Updated build tooling security vulnerabilities.
-* Improvement: @timnolte - Changed build tooling scripts.
+### Configue WP to use edX as the idp.
 
-### 3.8.5 ###
-
-* Fix: @timnolte - Fixed missing URL request validation before use & ensure proper current page URL is setup for Redirect Back.
-* Fix: @timnolte - Fixed Redirect URL Logic to Handle Sub-directory Installs.
-* Fix: @timnolte - Fixed issue with redirecting user back when the openid_connect_generic_auth_url shortcode is used.
-
-### 3.8.4 ###
-
-* Fix: @timnolte - Fixed invalid State object access for redirection handling.
-* Improvement: @timnolte - Fixed local wp-env Docker development environment.
-* Improvement: @timnolte - Fixed Composer scripts for linting and static analysis.
-
-### 3.8.3 ###
-
-* Fix: @timnolte - Fixed problems with proper redirect handling.
-* Improvement: @timnolte - Changes redirect handling to use State instead of cookies.
-* Improvement: @timnolte - Refactored additional code to meet coding standards.
-
-### 3.8.2 ###
-
-* Fix: @timnolte - Fixed reported XSS vulnerability on WordPress login screen.
-
-### 3.8.1 ###
-
-* Fix: @timnolte - Prevent SSO redirect on password protected posts.
-* Fix: @timnolte - CI/CD build issues.
-* Fix: @timnolte - Invalid redirect handling on logout for Auto Login setting.
-
-### 3.8.0 ###
-
-* Feature: @timnolte - Ability to use 6 new constants for setting client configuration instead of storing in the DB.
-* Improvement: @timnolte - Plugin development & contribution updates.
-* Improvement: @timnolte - Refactored to meet WordPress coding standards.
-* Improvement: @timnolte - Refactored to provide localization.
-
---------
-
-[See the previous changelogs here](https://github.com/oidc-wp/openid-connect-generic/blob/main/CHANGELOG.md#changelog)
+- Head over to `https://<wordpress_domain>/wp/wp-admin/options-general.php?page=openid-connect-generic-settings`.
+- **Client ID**: `Client ID` generated above.
+- **Client Secret Key**: `Client SECRET` generated above.
+- **OpenID Scope**: `email profile openid`
+- **Login Endpoint URL**: `https://learn.ibl.edducation/openid/authorize`
+- **Userinfo Endpoint URL**: `https://learn.ibl.edducation/openid/userinfo`
+- **Token Validation Endpoint URL**: `https://learn.ibl.edducation/openid/token`
+- **End Session Endpoint URL**: `https://learn.ibl.edducation/openid/end-session`
+- **Identity Key**: `nickname`
+- **Nickname Key**: `nickname`
+- **Enable Refresh Token**: `True` (Check)
+- **Link Existing Users**: `True` (Check)
+- **Create user if does not exist**: `True` (Check)
+- **Redirect Back to Origin Page**: `True` (Check)
+- **Redirect to the login screen when session is expired**: `True` (Check)
+- **Alternate Redirect URI**: `True` (Check)
+- **Enable Logging**: `True` (Check)
+- Click `Save Changes` button.

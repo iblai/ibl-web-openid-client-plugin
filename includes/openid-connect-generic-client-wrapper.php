@@ -381,8 +381,8 @@ class OpenID_Connect_Generic_Client_Wrapper {
 			// Happens if non-openid login was used.
 			return $redirect_url;
 		} else if ( ! parse_url( $redirect_url, PHP_URL_HOST ) ) {
-			// Convert to absolute url if needed, site_url() to be friendly with non-standard (Bedrock) layout.
-			$redirect_url = site_url( $redirect_url );
+			// Convert to absolute url if needed, home_url() to be friendly with non-standard (Bedrock) layout.
+			$redirect_url = home_url( $redirect_url );
 		}
 
 		$claim = $user->get( 'openid-connect-generic-last-id-token-claim' );
