@@ -212,6 +212,7 @@ class OpenID_Connect_Generic_Client_Wrapper {
 				'redirect_uri' => $this->client->get_redirect_uri(),
 				'redirect_to' => $this->get_redirect_to(),
 				'acr_values' => $this->settings->acr_values,
+				'edx_provider' => ''
 			),
 			$atts,
 			'openid_connect_generic_auth_url'
@@ -242,6 +243,10 @@ class OpenID_Connect_Generic_Client_Wrapper {
 			rawurlencode( $atts['redirect_uri'] ),
 			rawurlencode( $atts['acr_values'] )
 		);
+
+		if ( !empty( $atts['edx_provider'] ) ) {
+			$url .= ('&provider=' . $atts['edx_provider']);
+		}
 
 		$this->logger->log( apply_filters( 'openid-connect-generic-auth-url', $url ), 'make_authentication_url' );
 		return apply_filters( 'openid-connect-generic-auth-url', $url );
