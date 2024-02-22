@@ -1,33 +1,32 @@
 {
-    "name": "ibl/ibl-web-openid-client-plugin",
-    "version": "3.9.1",
-    "description": "openid-client",
-    "type": "wordpress-plugin",
-    "autoload": {
-        "psr-4": {
-            "Ibl\\IblWebOpenidClientPlugin\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "IBL"
-        }
-    ],
-    "require": {
-        "php": ">=7.4.3",
-        "composer/installers": "^2.2"
-      },
-      "require-dev": {
-        "phpunit/phpunit": "^9",
-        "10up/wp_mock": "dev-trunk"
-      },
-    "config": {
-        "allow-plugins": {
-            "composer/installers": true,
-            "johnpbloch/wordpress-core-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "phpro/grumphp": true,
-            "phpstan/extension-installer": true
-        }
-    }
+	"name": "ibl/ibl-web-openid-client-plugin",
+	"description": "openid-client",
+	"type": "wordpress-plugin",
+	"autoload": {
+		"psr-4": {
+			"Ibl\\IblWebOpenidClientPlugin\\": "src/"
+		}
+	},
+	"authors": [
+		{
+			"name": "IBL"
+		}
+	],
+	"require": {
+		"php": ">=7.4.3",
+		"composer/installers": "^2.2"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^9",
+		"10up/wp_mock": "dev-trunk"
+	},
+	"config": {
+		"allow-plugins": {
+			"composer/installers": true,
+			"johnpbloch/wordpress-core-installer": true,
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"phpro/grumphp": true,
+			"phpstan/extension-installer": true
+		}
+	}
 }
