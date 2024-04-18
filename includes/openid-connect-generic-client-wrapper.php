@@ -219,8 +219,12 @@ class OpenID_Connect_Generic_Client_Wrapper {
 		);
 
 		// Validate the redirect to value to prevent a redirection attack.
-		if ( ! empty( $atts['redirect_to'] ) ) {
-			$atts['redirect_to'] = wp_validate_redirect( $atts['redirect_to'], home_url() );
+		$allowed_spa_hosts = defined("ALLOWED_SPA_HOSTS") ? ALLOWED_SPA_HOSTS : [];
+		$parsed_redirect_to = parse_url($atts['redirect_to']);
+		if ( !($parsed_redirect_to['scheme'] == 'ibl-apps' && in_array($parsed_redirect_to['host'], $allowed_spa_hosts)) ) {
+			if ( ! empty( $atts['redirect_to'] ) ) {
+				$atts['redirect_to'] = wp_validate_redirect( $atts['redirect_to'], home_url() );
+			}	
 		}
 
 		$separator = '?';
